@@ -1,0 +1,96 @@
+﻿@model DataAccessLayer.User
+
+<div class="modal fade" id="userModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                @if (Model.Id == 0)
+                {
+                    <h5 class="modal-title">Add User Information</h5>
+                }
+                else
+                {
+                    <h5 class="modal-title">Edit User Information</h5>
+                }
+                <button type="button" class="close closebutton" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @Html.AntiForgeryToken()
+
+                <form id="userForm">
+                    @Html.HiddenFor(model => model.Id)
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Name)
+                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control", required = "required" })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Email)
+                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control", type = "email", required = "required" })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Phone)
+                        @Html.TextBoxFor(model => model.Phone, new { @class = "form-control", required = "required" })
+                        @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Address)
+                        @Html.TextBoxFor(model => model.Address, new { @class = "form-control" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.StateId)
+                        @Html.DropDownListFor(m => m.StateId, (SelectList)ViewBag.States, "Select State", new { @class = "form-control", id = "StateId" })
+                        @Html.ValidationMessageFor(model => model.StateId, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CityId)
+
+                        @if (ViewBag.Cities == null)
+                        {
+                            @Html.DropDownListFor(m => m.CityId, new SelectList(Enumerable.Empty<SelectListItem>()), "Select City", new { @class = "form-control", id = "CityId" })
+                        }
+                        else
+                        {
+                            @Html.DropDownListFor(m => m.CityId, (SelectList)ViewBag.Cities, "Select City", new { @class = "form-control", id = "CityId" })
+                        }
+
+                        @Html.ValidationMessageFor(model => model.CityId, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.CheckBox("Agree")
+                        @Html.Label("I agree to the terms and conditions")
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" id="submitBtn" disabled>Submit</button>
+                        <button type="button" class="btn btn-secondary closebutton" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+                @*}*@
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+
+<script>
+    $(document).ready(function () {
+        $('#Agree').change(function () {
+            $('#submitBtn').prop('disabled', !this.checked);
+        });
+
+        $(".closebutton").click(function () {
+            $("#userModal").modal('hide');
+        });
+    });
+</script>
